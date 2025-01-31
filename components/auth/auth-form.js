@@ -3,6 +3,7 @@ import { signIn } from 'next-auth/client';
 import { useRouter } from 'next/router';
 
 import classes from './auth-form.module.css';
+import { redirect } from 'next/dist/server/api-utils';
 
 async function createUser(email, password) {
   const response = await fetch('/api/auth/signup', {
@@ -40,7 +41,8 @@ function AuthForm() {
     const enteredPassword = passwordInputRef.current.value;
 
     if(isLogin){
-      // Log user in
+      const result = await signIn('credentials', {redirect: false, email: enteredEmail, password: enteredPassword});
+      console.log(result);
     } else {
       try {
         const result = await createUser(enteredEmail, enteredPassword);
